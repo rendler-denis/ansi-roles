@@ -1,0 +1,6 @@
+---
+
+- name: running daemon
+  service:
+    name: 'transmission-daemon'
+    state: started

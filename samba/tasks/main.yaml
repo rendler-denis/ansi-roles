@@ -1,0 +1,52 @@
+---
+
+- name: Ensure <samba> app is installed
+  apt:
+    name:         "{{ packages }}"
+    update_cache: yes
+  vars:
+    packages:
+      - samba
+      - samba-common-bin
+  notify:
+    - service stop
+
+- name: Ensure <samba/workgroup> configuration
+  lineinfile:
+    path:     /etc/samba/smb.conf
+    regexp:   '(\s*)workgroup = .*'
+    line:     '\1workgroup = {{ samba.workgroup }}'
+    backup:   yes
+    backrefs: yes
+
+- name: Ensure <tbox> share is configured
+  blockinfile:
+    path:   /etc/samba/smb.conf
+    backup: yes
+    marker: "# {mark} ANSIBLE MANAGED BLOCK {{ item.key }}"
+    block: |
+      {{ item.value }}
+  with_dict: "{{ samba.shares }}"
+  notify:
+    - service start
+
+- name: Ensure <samba> users are created
+  user:
+    name:        "{{ item.name }}"
+    password:    "{{ item.passwd }}"
+    shell:       "{{ item.shell | default('/bin/false') }}"
+    group:       "{{ item.group | default(omit) }}"
+    uid:         "{{ item.uid | default(omit) }}"
+    create_home: no
+  with_items: "{{ samba.users }}"
+  when: (samba.users | length) > 0
+
+- name: Ensure <samba> users are registered
+  shell: >
+    (pdbedit --user={{ item.name }} 2>&1 > /dev/null) \
+    || (echo {{ item.passwd }}; echo {{ item.passwd }}) \
+    | smbpasswd -s -a {{ item.name }}
+  with_items: "{{ samba.users }}"
+  no_log: true
+  register: create_user_output
+  changed_when: "'Added user' in create_user_output.stdout"

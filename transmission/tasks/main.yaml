@@ -1,0 +1,25 @@
+---
+
+- name: Ensure config folder is created
+  file:
+    path:     "{{ transmission.config.path }}"
+    force:    yes
+    recurse:  yes
+    state:    directory
+
+- name: Ensure defaults are configured
+  template:
+    src:    templates/etc/default/transmission-daemon
+    dest:   '/etc/default/transmission-daemon'
+
+- name: Ensure config file is installed
+  template:
+    src:    templates/settings.json
+    dest:   "{{ transmission.config.path + '/settings.json' }}"
+
+- name: Ensure <transmission> packages are installed
+  apt:
+    name:         "{{ transmission.pkg }}"
+    update_cache: yes
+  notify:
+    - running daemon

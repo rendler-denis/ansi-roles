@@ -1,0 +1,5 @@
+---
+
+swap:
+    file_path: /swap.file
+    file_size_mb: 4192

@@ -1,0 +1,5 @@
+---
+pkg:
+    packages:
+        - vim
+        - htop

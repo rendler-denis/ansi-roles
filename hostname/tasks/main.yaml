@@ -1,0 +1,5 @@
+---
+
+- name: Ensure host name is configured
+  hostname:
+    name: {{ hostname.name }}

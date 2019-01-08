@@ -1,0 +1,6 @@
+---
+
+- name: Ensure apps are installed
+  apt:
+    name: "{{ pkg.packages }}"
+    update_cache: yes

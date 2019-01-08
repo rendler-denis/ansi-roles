@@ -1,0 +1,5 @@
+---
+samba:
+  workgroup: HOMEGROUP
+  shares: []
+  users: []

@@ -1,0 +1,18 @@
+---
+transmission:
+  pkg:
+    - transmission-common
+    - transmission-daemon
+    - transmission-gtk
+  download_dir: '/home/pi/Downloads'
+  watch_dir: '/home/pi/Downloads/watch_dir'
+  config:
+    path: "/home/pi/.config/transmission-daemon"
+  rpc:
+    user: 'pi'
+    pass: 'pi'
+    port: 9099
+    url: 'tms/'
+    whitelist_host: ""
+    whitelist_ip: "127.0.0.1"
+    whitelist_ip_enable: true
