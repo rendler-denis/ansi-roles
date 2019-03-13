@@ -18,6 +18,11 @@ pipeline {
             sleep 10
           }
         }
+        stage('sdfsdf') {
+          steps {
+            sleep 7
+          }
+        }
       }
     }
   }
