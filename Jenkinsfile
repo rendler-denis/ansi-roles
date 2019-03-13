@@ -7,8 +7,17 @@ pipeline {
   }
   stages {
     stage('nope') {
-      steps {
-        echo 'salut'
+      parallel {
+        stage('nope') {
+          steps {
+            echo 'salut'
+          }
+        }
+        stage('vvvv') {
+          steps {
+            sleep 10
+          }
+        }
       }
     }
   }
